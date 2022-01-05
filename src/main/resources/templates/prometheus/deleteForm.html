@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>inputForm</title>
+</head>
+<body>
+    <h2>Prometheus 설정 폼</h2>
+    <form action="/prometheus/endpoint/delete" method="post">
+        <label for="fname">삭제 할 endpoint:</label><br>
+        <input type="text" id="fname" name="endpoint" value="endpoint를 입력해 주세요."><br><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

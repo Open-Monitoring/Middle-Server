@@ -31,6 +31,23 @@ public class PrometheusYAMLEditor {
         objectMapper.writeValue(new File(prometheusYAMLConfigPath), prometheusConfig);
     }
 
+    public void deleteHTTPEndPoint(String endpoint) throws IOException {
+        ObjectMapper objectMapper = new YAMLMapper();
+
+        PrometheusYAMLConfig prometheusConfig = objectMapper.readValue(
+                new File(prometheusYAMLConfigPath),
+                PrometheusYAMLConfig.class);
+
+        if(prometheusConfig.getScrape_configs().get(0).static_configs.get(0).targets == null)
+            return;
+
+        Set targets = prometheusConfig.getScrape_configs().get(0).static_configs.get(0).targets;
+        if(targets.contains(endpoint))
+            targets.remove(endpoint);
+
+        objectMapper.writeValue(new File(prometheusYAMLConfigPath), prometheusConfig);
+    }
+
     public Set getHTTPEndPoints() throws IOException {
         ObjectMapper objectMapper = new YAMLMapper();
 

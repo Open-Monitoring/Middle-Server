@@ -30,15 +30,28 @@ public class PrometheusController {
         this.prometheusApi = prometheusApi;
     }
 
-    @GetMapping("/form")
-    public String index(){
-        return "prometheus/inputForm";
+    @GetMapping("/form/add")
+    public String addForm(){
+        return "prometheus/addForm";
+    }
+
+    @GetMapping("/form/delete")
+    public String deleteForm(){
+        return "prometheus/deleteForm";
     }
 
     @PostMapping("/endpoint/add")
     public String applyHTTPEndPoint(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String endpoint = request.getParameter("endpoint");
         prometheusYAMLEditor.addHTTPEndPoint(endpoint);
+        prometheusApi.reloadConfig();
+        return "redirect:/";
+    }
+
+    @PostMapping("/endpoint/delete")
+    public String deleteHTTPEndPoint(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String endpoint = request.getParameter("endpoint");
+        prometheusYAMLEditor.deleteHTTPEndPoint(endpoint);
         prometheusApi.reloadConfig();
         return "redirect:/";
     }
