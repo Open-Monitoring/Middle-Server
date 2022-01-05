@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Data
@@ -36,6 +37,7 @@ public class PrometheusYAMLConfig {
     @AllArgsConstructor
     public static class StaticConfigs{
         Set<String> targets;
+        Map<String,String> labels;
     }
 
 }
