@@ -2,15 +2,19 @@ package me.soungho.openmonitoring.Controller;
 
 import lombok.extern.slf4j.Slf4j;
 import me.soungho.openmonitoring.feignApi.PrometheusApi;
+import me.soungho.openmonitoring.utils.validation.annotation.HTTPEndpoint;
 import me.soungho.openmonitoring.yamlEditor.prometheus.PrometheusYAMLEditor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 
 /***
@@ -19,6 +23,7 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/prometheus/endpoint")
 @Slf4j
+@Validated
 public class PrometheusEndpointController {
 
     private PrometheusYAMLEditor prometheusYAMLEditor;
@@ -51,31 +56,17 @@ public class PrometheusEndpointController {
         return "prometheus/deleteForm";
     }
 
-    /***
-     * 엔드포인트 추가 api
-     * @param request
-     * @param response
-     * @return
-     * @throws IOException
-     */
+    //엔드포인트 추가 api
     @PostMapping("/add")
-    public String applyHTTPEndPoint(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String endpoint = request.getParameter("endpoint");
+    public String applyHTTPEndPoint(@RequestParam("endpoint") @HTTPEndpoint String endpoint) throws IOException {
         prometheusYAMLEditor.addHTTPEndPoint(endpoint);
         prometheusApi.reloadConfig();
         return "redirect:/";
     }
 
-    /***
-     * 엔드포인트 삭제 api
-     * @param request
-     * @param response
-     * @return
-     * @throws IOException
-     */
+    //엔드포인트 삭제 api
     @PostMapping("/delete")
-    public String deleteHTTPEndPoint(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String endpoint = request.getParameter("endpoint");
+    public String deleteHTTPEndPoint(@RequestParam("endpoint") @HTTPEndpoint String endpoint) throws IOException {
         prometheusYAMLEditor.deleteHTTPEndPoint(endpoint);
         prometheusApi.reloadConfig();
         return "redirect:/";
