@@ -13,16 +13,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/***
+ * prometheus의 엔드포인트 설정 중계 컨트롤러
+ */
 @Controller
-@RequestMapping("/prometheus")
+@RequestMapping("/prometheus/endpoint")
 @Slf4j
-public class PrometheusController {
+public class PrometheusEndpointController {
 
     private PrometheusYAMLEditor prometheusYAMLEditor;
     private PrometheusApi prometheusApi;
 
     @Autowired
-    public PrometheusController(
+    public PrometheusEndpointController(
             PrometheusYAMLEditor prometheusYAMLEditor,
             PrometheusApi prometheusApi
     ){
@@ -30,17 +33,32 @@ public class PrometheusController {
         this.prometheusApi = prometheusApi;
     }
 
+    /***
+     * 엔드포인트 추가 폼 화면
+     * @return
+     */
     @GetMapping("/form/add")
     public String addForm(){
         return "prometheus/addForm";
     }
 
+    /***
+     * 엔드포인트 삭제 폼 화면
+     * @return
+     */
     @GetMapping("/form/delete")
     public String deleteForm(){
         return "prometheus/deleteForm";
     }
 
-    @PostMapping("/endpoint/add")
+    /***
+     * 엔드포인트 추가 api
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/add")
     public String applyHTTPEndPoint(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String endpoint = request.getParameter("endpoint");
         prometheusYAMLEditor.addHTTPEndPoint(endpoint);
@@ -48,7 +66,14 @@ public class PrometheusController {
         return "redirect:/";
     }
 
-    @PostMapping("/endpoint/delete")
+    /***
+     * 엔드포인트 삭제 api
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/delete")
     public String deleteHTTPEndPoint(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String endpoint = request.getParameter("endpoint");
         prometheusYAMLEditor.deleteHTTPEndPoint(endpoint);
