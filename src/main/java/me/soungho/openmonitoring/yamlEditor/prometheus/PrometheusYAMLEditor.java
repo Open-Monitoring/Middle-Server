@@ -18,7 +18,7 @@ public class PrometheusYAMLEditor {
     @Value("${prometheus.config.path}")
     private String prometheusYAMLConfigPath;
 
-    public void addHTTPEndPoint(String endpoint) throws IOException {
+    public PrometheusYAMLConfig addHTTPEndPoint(String endpoint) throws IOException {
         ObjectMapper objectMapper = new YAMLMapper();
 
         PrometheusYAMLConfig prometheusConfig = objectMapper.readValue(
@@ -29,9 +29,10 @@ public class PrometheusYAMLEditor {
             prometheusConfig.getScrape_configs().get(0).static_configs.get(0).targets = new HashSet();
         prometheusConfig.getScrape_configs().get(0).static_configs.get(0).targets.add(endpoint);
         objectMapper.writeValue(new File(prometheusYAMLConfigPath), prometheusConfig);
+        return prometheusConfig;
     }
 
-    public void deleteHTTPEndPoint(String endpoint) throws IOException {
+    public PrometheusYAMLConfig deleteHTTPEndPoint(String endpoint) throws IOException {
         ObjectMapper objectMapper = new YAMLMapper();
 
         PrometheusYAMLConfig prometheusConfig = objectMapper.readValue(
@@ -39,13 +40,14 @@ public class PrometheusYAMLEditor {
                 PrometheusYAMLConfig.class);
 
         if(prometheusConfig.getScrape_configs().get(0).static_configs.get(0).targets == null)
-            return;
+            return null;
 
         Set targets = prometheusConfig.getScrape_configs().get(0).static_configs.get(0).targets;
         if(targets.contains(endpoint))
             targets.remove(endpoint);
 
         objectMapper.writeValue(new File(prometheusYAMLConfigPath), prometheusConfig);
+        return prometheusConfig;
     }
 
     public Set getHTTPEndPoints() throws IOException {
