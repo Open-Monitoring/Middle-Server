@@ -1,4 +1,4 @@
-package me.soungho.openmonitoring.Controller;
+package me.soungho.openmonitoring.controller;
 
 import org.springframework.stereotype.Controller;
 
